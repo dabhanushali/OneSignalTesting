@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 const ONESIGNAL_API_KEY = process.env.ONESIGNAL_API_KEY;
@@ -77,6 +77,12 @@ app.post("/send-email", async (req, res) => {
   }
 });
 
-app.listen(4000, () => {
-  console.log("🚀 Server running on port 4000");
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(4000, () => {
+    console.log("🚀 Server running on port 4000");
+  });
+}
+
+// Export for Vercel serverless
+export default app;
