@@ -13,7 +13,7 @@ function App() {
   }, []);
 
   const sendNotification = async () => {
-    await fetch("http://localhost:4000/send-notification", {
+    await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/send-notification`, {
       method: "POST",
     });
     // alert("Notification triggered!");
