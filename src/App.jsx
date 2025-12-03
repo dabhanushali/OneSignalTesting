@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     OneSignal.init({
-      appId: "b2213963-8918-4453-81ce-4d2ec04fe468",
+      appId: "5b99d625-c220-4e64-8aaa-2cc852b0be38",
       notifyButton: { enable: true },
     });
   }, []);
