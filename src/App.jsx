@@ -13,8 +13,12 @@ function App() {
   }, []);
 
   const sendNotification = async () => {
-    const baseUrl = (import.meta.env.VITE_BACKEND_URL || 'https://one-signal-testing-lp2l.vercel.app/').replace(/\/$/, '');
-    const endpoint = import.meta.env.VITE_BACKEND_URL ? '/api/send-notification' : '/send-notification';
+    const baseUrl = (import.meta.env.VITE_BACKEND_URL || 'https://one-signal-testing-lp2l.vercel.app').replace(/\/$/, '');
+    // If running against a local Express backend (localhost) use the root path
+    // otherwise call the Vercel serverless function under /api
+    const isLocal = /localhost|127\.0\.0\.1/.test(baseUrl);
+    const endpoint = isLocal ? '/send-notification' : '/api/send-notification';
+
     await fetch(`${baseUrl}${endpoint}`, {
       method: "POST",
     });
