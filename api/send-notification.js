@@ -1,15 +1,30 @@
 import fetch from "node-fetch";
 
-// Basic serverless handler with CORS headers and OPTIONS preflight support.
+function getAllowedOrigins() {
+  const raw = process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || "";
+  if (!raw) return [];
+  return raw.split(",").map((s) => s.trim()).filter(Boolean);
+}
+
 export default async function handler(req, res) {
-  // Allow requests from any origin or restrict to your domain in production
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  const allowed = getAllowedOrigins();
+  const requestOrigin = req.headers.origin || null;
+
+  // If origin is allowed, set header. Otherwise omit the header so browser blocks cross-origin calls.
+  if (requestOrigin && allowed.includes(requestOrigin)) {
+    res.setHeader("Access-Control-Allow-Origin", requestOrigin);
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  // Respond to preflight
+  // OPTIONS preflight
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
+  }
+
+  // Simple GET debug to verify route & CORS quickly
+  if (req.method === 'GET') {
+    return res.status(200).json({ ok: true, requestOrigin, allowed });
   }
 
   if (req.method !== 'POST') {

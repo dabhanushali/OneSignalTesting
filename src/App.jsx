@@ -6,10 +6,17 @@ function App() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    OneSignal.init({
-      appId: "5b99d625-c220-4e64-8aaa-2cc852b0be38",
-      notifyButton: { enable: true },
-    });
+    const raw = import.meta.env.VITE_ALLOWED_ORIGINS || import.meta.env.VITE_FRONTEND_URL || "http://localhost:3000,https://one-signal-testing.vercel.app";
+    const allowed = raw.split(",").map((s) => s.trim()).filter(Boolean);
+    const origin = typeof window !== "undefined" ? window.location.origin : null;
+    if (origin && allowed.includes(origin)) {
+      OneSignal.init({
+        appId: "5b99d625-c220-4e64-8aaa-2cc852b0be38",
+        notifyButton: { enable: true },
+      });
+    } else {
+      console.info("OneSignal init skipped for origin:", origin);
+    }
   }, []);
 
   const sendNotification = async () => {
