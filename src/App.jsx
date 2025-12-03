@@ -13,7 +13,7 @@ function App() {
   }, []);
 
   const sendNotification = async () => {
-    const baseUrl = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000').replace(/\/$/, '');
+    const baseUrl = (import.meta.env.VITE_BACKEND_URL || 'https://one-signal-testing-lp2l.vercel.app/').replace(/\/$/, '');
     const endpoint = import.meta.env.VITE_BACKEND_URL ? '/api/send-notification' : '/send-notification';
     await fetch(`${baseUrl}${endpoint}`, {
       method: "POST",
@@ -46,14 +46,14 @@ function App() {
         <button onClick={sendNotification}>Send Notification</button>
       </div>
 
-      <div className="second-div">
+      {/* <div className="second-div">
         <h2>Increment this counter to 5 to receive the notification</h2>
         <h3>Counter: {count}</h3>
         <button onClick={() => setCount(0)}>Reset the Counter</button>
         <button onClick={() => setCount((prevCount) => prevCount + 1)}>
           Increment Counter
         </button>
-      </div>
+      </div> */}
 
       {/* <div>
         <h2>Click the below button to receive the email right now</h2>
